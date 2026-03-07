@@ -5366,7 +5366,13 @@
     function updateMagnifier(event, sourceCanvas, sourceCtx) {
         if (!magnifierCanvas || !sourceCanvas) return;
 
+        if (magnifierCanvas.width !== MAGNIFIER_SIZE) {
+            magnifierCanvas.width = MAGNIFIER_SIZE;
+            magnifierCanvas.height = MAGNIFIER_SIZE;
+        }
+
         const rect = sourceCanvas.getBoundingClientRect();
+
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
 
@@ -5375,56 +5381,48 @@
         const pixelX = mouseX * scaleX;
         const pixelY = mouseY * scaleY;
 
-        const clampedX = Math.min(Math.max(pixelX, 0), sourceCanvas.width);
-        const clampedY = Math.min(Math.max(pixelY, 0), sourceCanvas.height);
-
-        const srcRegionSize = MAGNIFIER_SIZE / ZOOM_FACTOR;
-
-        let srcX = clampedX - srcRegionSize / 2;
-        let srcY = clampedY - srcRegionSize / 2;
-
-        srcX = Math.min(Math.max(srcX, 0), sourceCanvas.width - srcRegionSize);
-        srcY = Math.min(Math.max(srcY, 0), sourceCanvas.height - srcRegionSize);
-        if (srcX < 0) srcX = 0;
-        if (srcY < 0) srcY = 0;
-        if (srcX + srcRegionSize > sourceCanvas.width) srcX = sourceCanvas.width - srcRegionSize;
-        if (srcY + srcRegionSize > sourceCanvas.height) srcY = sourceCanvas.height - srcRegionSize;
-
         magnifierCtx.clearRect(0, 0, MAGNIFIER_SIZE, MAGNIFIER_SIZE);
-
-        magnifierCtx.drawImage(
-            sourceCanvas,
-            srcX, srcY, srcRegionSize, srcRegionSize,   // 源区域
-            0, 0, MAGNIFIER_SIZE, MAGNIFIER_SIZE        // 目标区域（放大）
-        );
-
-        const center = MAGNIFIER_SIZE / 2;
-        magnifierCtx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-        magnifierCtx.lineWidth = 1.5;
-        magnifierCtx.beginPath();
-        magnifierCtx.moveTo(center - 8, center);
-        magnifierCtx.lineTo(center + 8, center);
-        magnifierCtx.moveTo(center, center - 8);
-        magnifierCtx.lineTo(center, center + 8);
-        magnifierCtx.stroke();
-
         magnifierCtx.fillStyle = '#020617';
         magnifierCtx.fillRect(0, 0, MAGNIFIER_SIZE, MAGNIFIER_SIZE);
+        
+        magnifierCtx.imageSmoothingEnabled = false;
 
         magnifierCtx.save();
+        
         magnifierCtx.translate(MAGNIFIER_SIZE / 2, MAGNIFIER_SIZE / 2); 
+        
         magnifierCtx.scale(ZOOM_FACTOR, ZOOM_FACTOR); 
-        magnifierCtx.translate(-clampedX, -clampedY); 
+       
+        magnifierCtx.translate(-pixelX, -pixelY); 
         
         magnifierCtx.drawImage(sourceCanvas, 0, 0);
         magnifierCtx.restore();
-        
-        magnifierCtx.beginPath();
-        magnifierCtx.arc(center, center, 2, 0, 2 * Math.PI);
-        magnifierCtx.fill();
 
-        const magnifierLeft = event.clientX - rect.left - MAGNIFIER_SIZE / 2;
-        const magnifierTop = event.clientY - rect.top - MAGNIFIER_SIZE - 10;
+        const center = MAGNIFIER_SIZE / 2;
+            
+        magnifierCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        magnifierCtx.lineWidth = 1;
+        magnifierCtx.beginPath();
+        magnifierCtx.moveTo(center - 7, center);
+        magnifierCtx.lineTo(center - 5, center);
+        magnifierCtx.moveTo(center + 5, center);
+        magnifierCtx.lineTo(center + 7, center);
+        magnifierCtx.moveTo(center, center - 7);
+        magnifierCtx.lineTo(center, center - 5);
+        magnifierCtx.moveTo(center, center + 5);
+        magnifierCtx.lineTo(center, center + 7);
+        magnifierCtx.stroke();
+
+        magnifierCtx.beginPath();
+        magnifierCtx.arc(center, center, 2.5, 0, 2 * Math.PI);
+        magnifierCtx.fillStyle = '#ef4444'; // 红色
+        magnifierCtx.fill();
+        magnifierCtx.lineWidth = 1.5;
+        magnifierCtx.strokeStyle = '#ffffff';
+        magnifierCtx.stroke();
+
+        const magnifierLeft = mouseX - MAGNIFIER_SIZE / 2;
+        const magnifierTop = mouseY - MAGNIFIER_SIZE - 15; 
 
         magnifierCanvas.style.left = magnifierLeft + 'px';
         magnifierCanvas.style.top = magnifierTop + 'px';
