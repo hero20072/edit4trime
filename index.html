@@ -5132,13 +5132,66 @@
 
                 const reader = new FileReader();
                 reader.onload = (event) => {
+                    // let specificErrorMsg = ""; 
+                    
                     try {
-                        const yamlText = event.target.result;
-                        const imported = jsyaml.load(yamlText);
+                        let textToParse = event.target.result;
+
+                        textToParse = textToParse.replace(/([*&][a-zA-Z0-9_]+)@([a-zA-Z0-9_]+)/g, '$1_AT_$2');
+
+                        let dummyCounter = 1;
+                        textToParse = textToParse.replace(/^(\s*)([^\x00-\xffa-zA-Z0-9_]{1,2})(\s*:)/gm, (match, p1, p2, p3) => {
+                            return `${p1}${p2}_auto_${dummyCounter++}${p3}`;
+                        });
+
+                        let imported;
+                        let retries = 100;
+                        let dupCounter = 0;
+                        let showDuplicateWarning = false;
+
+                        while (retries > 0) {
+                            try {
+                                imported = jsyaml.load(textToParse);
+                                break;
+                            } catch (err) {
+                                if (err.name === 'YAMLException') {
+
+                                    if (err.message.includes('unidentified alias')) {
+                                        const match = err.message.match(/unidentified alias "([^"]+)"/);
+                                        if (match && match[1]) {
+                                            const aliasName = match[1];
+                                            const regex = new RegExp(`\\*${aliasName}\\b`, 'g');
+                                            textToParse = textToParse.replace(regex, `"_REF_${aliasName}_"`);
+                                            retries--;
+                                            continue;
+                                        }
+                                    }
+
+                                    if (err.message.includes('duplicated mapping key')) {
+                                        showDuplicateWarning = true;
+ 
+                                        if (err.mark && err.mark.line !== undefined && err.mark.column !== undefined) {
+                                            const lineIdx = err.mark.line;
+                                            const colIdx = err.mark.column;
+                                            let lines = textToParse.split('\n');
+
+                                            if (lines[lineIdx]) {
+                                                dupCounter++;
+                                               
+                                                lines[lineIdx] = lines[lineIdx].substring(0, colIdx) + `__DUP_${dupCounter}_` + lines[lineIdx].substring(colIdx);
+                                                textToParse = lines.join('\n');
+                                                retries--;
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                }
+                                throw err; 
+                            }
+                        }
 
                         if (!imported || !imported.preset_keyboards) {
-                            alert("无效的配置文件：未发现 preset_keyboards 结构。");
-                            return;
+                            throw new Error("无效的配置文件：未找到 preset_keyboards 数据。");
                         }
 
                         if (imported.colors) {
@@ -5158,19 +5211,13 @@
                         if (imported.preedit) state.preedit = Object.assign({}, state.preedit, imported.preedit);
                         if (imported.window) state.window = Object.assign({}, state.window, imported.window);
                         
-                        if (imported.colors) {
-                            state.colors = imported.colors;
-                        }
-
+                        if (imported.colors) state.colors = imported.colors;
                         if (imported.liquid_keyboard) state._static.liquid_keyboard = imported.liquid_keyboard;
                         if (imported.preset_keys) state._static.preset_keys = imported.preset_keys;
                         if (imported.fallback_colors) state._static.fallback_colors = imported.fallback_colors;
-
                         if (imported.preset_color_schemes) state.preset_color_schemes = imported.preset_color_schemes;
                         if (imported.preset_keyboards) state.preset_keyboards = imported.preset_keyboards;
 
-
-                        
                         Object.values(state.preset_color_schemes).forEach(scheme => {
                             Object.keys(scheme).forEach(key => {
                                 let val = scheme[key];
@@ -5195,12 +5242,38 @@
                         renderGlobalKeyboard();
 
                         addChatMessage('left', `✅ 导入成功！已识别方案：${Object.keys(state.preset_color_schemes).length}个，键盘：${Object.keys(state.preset_keyboards).length}个。`);
-                        
+
+                        if (showDuplicateWarning) {
+                            const warningMsg = `
+                                <div style="color: #475569; margin-top: 5px; font-size: 12px; line-height: 1.5; background: #fffbeb; padding: 10px; border-radius: 8px; border-left: 3px solid #f59e0b;">
+                                    <b>⚠️ 格式兼容提示：已自动绕过重复属性</b><br><br>
+                                    您的文件中包含重复的键（Duplicated Keys）。同文输入法(Trime)通常会忽略重复项，但标准YAML语法不允许。<br><br>
+                                    <b>工坊已自动为您忽略这些重复项并完成读取。</b><br>
+                                    如果遇到极个别文件依然无法上传，建议使用文本编辑器检查是否有完全重复的配置行。<a href="https://www.yamlvalidator.org/zh" target="_blank" class="text-blue-400 underline">点击检查YAML语法</a>
+                                </div>
+                            `;
+                            setTimeout(() => addChatMessage('left', warningMsg), 300);
+                        }
+
                         importInput.value = '';
 
                     } catch (err) {
                         console.error(err);
-                        document.getElementById('import-error-popup').classList.remove('hidden');
+                        
+                        const errorPopup = document.getElementById('import-error-popup');
+                        const pTags = errorPopup.querySelectorAll('p');
+                        
+                        pTags[0].innerHTML = "⚠️ 导入失败";
+                        
+                        pTags[1].innerHTML = err.message.replace(/</g, '&lt;'); 
+                        pTags[1].className = "text-slate-300 text-sm text-left leading-relaxed break-all";
+                        
+                        if (pTags[2]) {
+                            pTags[2].innerHTML = `<a href="https://www.yamlvalidator.org/zh" target="_blank" class="text-blue-400 underline">点击检查YAML语法</a>`;
+                            pTags[2].style.display = 'block';
+                        }
+
+                        errorPopup.classList.remove('hidden');
                         importInput.value = '';
                     }
                 };
