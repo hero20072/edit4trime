@@ -2774,7 +2774,7 @@
                             ontouchend="cancelPressTimer()" 
                             ontouchcancel="cancelPressTimer()"
                             ondblclick="duplicateScheme('${id}')"
-                            onclick="if(!isLongPressTriggered){ currentScheme='${id}'; renderLayoutEditor(); updateCssEngine(); }"
+                            onclick="if(!isLongPressTriggered){ currentLayout='${id}'; selectedKeyIdx=null; cancelBatchMode(); renderLayoutEditor(); renderGlobalKeyboard(); }"
                             oncontextmenu="return false;"
                             class="select-none px-4 py-1.5 rounded-full text-xs font-medium border transition-all ${isActive ? 'bg-emerald-600 text-white border-emerald-500 shadow-md transform scale-105' : 'bg-slate-900 text-slate-500 border-slate-700 hover:border-slate-500'}">
                         ${scheme.name || id}
@@ -5099,6 +5099,10 @@
                 qrHoverTimer = null;
             }
         });
+        const colorUpload = document.getElementById('image-upload');
+        if (colorUpload) {
+            colorUpload.addEventListener('change', handleImageUpload);
+        }
     });
 
     window.onload = () => { 
@@ -5516,11 +5520,7 @@
             if (popup && popup.style.display !== 'none' && !popup.contains(e.target)) {
                 popup.style.display = 'none';
             }
-        const colorUpload = document.getElementById('image-upload');
-            if (colorUpload) {
-                colorUpload.addEventListener('change', handleImageUpload);
-            }
-        
+
             const partialPopup = document.getElementById('partial-export-popup');
         const partialBtn = document.querySelector('button[onclick="togglePartialExportPopup()"]');
         if (partialPopup && !partialPopup.classList.contains('hidden')) {
