@@ -4727,21 +4727,21 @@
             const parts = Object.entries(obj).map(([k, v]) => {
                 if (typeof v === 'string' && state.colors[v]) return `${k}: *${v}`;
                 
-                if (Array.isArray(v)) {
-                    const arrStr = v.map(item => typeof item === 'string' ? `"${item.replace(/"/g, '\\"')}"` : item).join(', ');
-                    return `${k}: [ ${arrStr} ]`;
-                }
+                if (Array.isArray(v)) {             
+                const arrStr = v.map(item => typeof item === 'string' ? `"${item.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"` : item).join(', ');
+                return `${k}: [ ${arrStr} ]`;
+            }
 
-                if (v !== null && typeof v === 'object') {
-                    return `${k}: ${toTrimeFlow(v)}`;
-                }
+            if (v !== null && typeof v === 'object') {
+                return `${k}: ${toTrimeFlow(v)}`;
+            }
 
-                if (k === 'label' || typeof v === 'string') {
-                    let s = String(v); 
-                    if (s === '') return `${k}: ""`;
-                    if (s === "'") return `${k}: "'"`;
-                    return `${k}: "${s.replace(/"/g, '\\"')}"`;
-                }
+            if (k === 'label' || typeof v === 'string') {
+                let s = String(v); 
+                if (s === '') return `${k}: ""`;
+                if (s === "'") return `${k}: "'"`;
+                return `${k}: "${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
+            }
                 
                 if (k === 'width' || k === 'height') {
                     return `${k}: ${parseFloat(v)}`;
