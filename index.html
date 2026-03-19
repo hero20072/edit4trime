@@ -1353,13 +1353,14 @@
             <p class="text-slate-300">请使用本工具 原创 或 使用官方yaml</p>
             <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg text-sm" onclick="document.getElementById('import-error-popup').classList.add('hidden')">知道了</button>
         </div>
-
+    </div>
+    
         <div id="image-viewer-overlay" class="hidden fixed inset-0 z-[99999] bg-black/90 flex flex-col items-center justify-center cursor-pointer transition-opacity" onclick="this.classList.add('hidden'); document.getElementById('image-viewer-img').src='';">
         <img id="image-viewer-img" src="" class="max-w-[95vw] max-h-[90vh] object-contain rounded-lg shadow-2xl transition-transform duration-300" />
         <p class="text-slate-400 mt-4 text-sm">点击任意空白处关闭</p>
     </div>
         
-    </div>
+    
 
 
     <script>
