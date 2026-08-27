@@ -1,7 +1,7 @@
-// ============================================================
-// 07-editors.js — editors
-// 由 test.html 拆分而来（无构建，经典脚本，按 01→11 顺序引入）
-// ============================================================
+
+
+
+
 
 function toggleKeyEditorLock() {
         isKeyEditorLocked = !isKeyEditorLocked;

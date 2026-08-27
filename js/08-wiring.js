@@ -1,7 +1,7 @@
-// ============================================================
-// 08-wiring.js — wiring
-// 由 test.html 拆分而来（无构建，经典脚本，按 01→11 顺序引入）
-// ============================================================
+
+
+
+
 
 function extractCustomMappings() {
         const set = new Set();
@@ -67,7 +67,7 @@ function renderNodeEditor() {
 
         const scheme = state.preset_color_schemes[currentScheme] || {};
 
-        // ---- 调色板 ----
+        
         Object.entries(state.colors).forEach(([id, val]) => {
             const rgbaColor = argbToCss(val);
 
@@ -87,7 +87,7 @@ function renderNodeEditor() {
                 </div>`;
         });
 
-        // ---- 映射板（核心 19 项 + 自定义 km* 项） ----
+        
         getCoreMappings().forEach(k => {
             colRight.innerHTML += mappingItemHtml(k);
         });
@@ -129,7 +129,7 @@ function drawWires() {
 
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             path.setAttribute('class', 'wire-path solid-wire');
-            // 曲线方向自适应：左→右用后弯控制点，右→左用前弯控制点
+            
             const dir = x1 <= x2 ? 1 : -1;
             path.setAttribute('d', `M ${x1} ${y1} C ${x1 + 60 * dir} ${y1}, ${x2 - 60 * dir} ${y2}, ${x2} ${y2}`);
 
@@ -141,14 +141,14 @@ function drawWires() {
             svg.appendChild(path);
         };
 
-        // 链路：调色板 → 映射板（核心项）
+        
         getCoreMappings().forEach(k => {
             const cId = scheme[k];
             if (!cId || !state.colors[cId]) return;
             addWire(`.color-port[data-id="${cId}"]`, `.port-in[data-id="${k}"]`, k);
         });
 
-        // 调色板 → 映射板（自定义项）
+        
         customMappings.forEach(m => {
             const cId = scheme[m];
             if (cId && state.colors[cId]) {
@@ -327,7 +327,7 @@ function openMappingPopup(mappingId, element, event) {
         if (editArea) editArea.style.display = isSys ? 'none' : 'block';
         if (deleteArea) deleteArea.style.display = isSys ? 'none' : 'block';
 
-        // 系统核心映射（现已展示在映射板中）不可被批量设置为按键色，隐藏批量区
+        
         const batchLabel = document.getElementById('popup-batch-label');
         const batchGrid = document.getElementById('popup-batch-grid');
         if (batchLabel) batchLabel.style.display = isSys ? 'none' : 'block';
@@ -395,7 +395,7 @@ function deleteMappingFromPopup() {
             return;
         }
         
-        if(!confirm(`确定要删除映射 [${name}] 吗？\n该操作无法撤销。`)) return;
+        if(!confirm(`确定要删除映射 [${name}] 吗？该操作无法撤销。`)) return;
         
         customMappings = customMappings.filter(m => m !== name);
         

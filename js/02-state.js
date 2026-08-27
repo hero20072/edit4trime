@@ -1,7 +1,7 @@
-// ============================================================
-// 02-state.js — state
-// 由 test.html 拆分而来（无构建，经典脚本，按 01→11 顺序引入）
-// ============================================================
+
+
+
+
 
 let state = {
         config_version: "3.0", name: "标准",
@@ -62,38 +62,38 @@ let state = {
             "default": { 
                 name: "标准", 
                 key_text_color: "color3", 
-                back_color: "color4",               // 候选栏背景
-                text_color: "color5",               // 编码文字
-                comment_text_color: "color3",       // 注解颜色
-                hilited_text_color: "color2",       // 高亮编码文字
-                hilited_back_color: "color1",       // 高亮编码背景 (拼音编码背景)
-                hilited_shadow_color: "color1",     // 高亮编码阴影
-                candidate_text_color: "color3",     // 候选项未选中文字
-                hilited_candidate_text_color: "color3", // 高亮候选项选中文字
-                hilited_candidate_back_color: "color5", // 高亮候选项选中背景
-                hilited_comment_text_color: "color3", // 高亮候选项选中注解       
-                keyboard_back_color: "color4",      // 键盘整体底色
-                key_back_color: "color2",           // 按键默认背景
+                back_color: "color4",               
+                text_color: "color5",               
+                comment_text_color: "color3",       
+                hilited_text_color: "color2",       
+                hilited_back_color: "color1",       
+                hilited_shadow_color: "color1",     
+                candidate_text_color: "color3",     
+                hilited_candidate_text_color: "color3", 
+                hilited_candidate_back_color: "color5", 
+                hilited_comment_text_color: "color3", 
+                keyboard_back_color: "color4",      
+                key_back_color: "color2",           
                 hilited_key_text_color: "color3",
                 text_back_color: "color3",
                 hilited_key_back_color: "color5",
                 key_border_color: "color3",
                 shadow_color: "color3",
-                candidate_separator_color: "color1", //候选词分割线
-                bh1: "color2",                       // 第一行按键背景
-                th1: "color3",                       // 第一行文字
-                bh2: "color2",                      // 第二行按键背景
-                th2: "color3",                       // 第二行文字
-                bh3: "color2",                       // 第三行按键背景
-                th3: "color3",                       // 第三行文字
-                bh4: "color2",                       // 符号行背景
-                th4: "color3",                       // 符号行文字  
-                bbs: "color2",                       // 退格和Shift背景
-                tbs: "color3",                       // 退格和Shift文字
-                bkg: "color2",                       // 空格和次选背景
-                tkg: "color5", //空格文字
-                benter: "color5",                   // Enter背景
-                tenter: "color3",                    // Enter文字3
+                candidate_separator_color: "color1", 
+                bh1: "color2",                       
+                th1: "color3",                       
+                bh2: "color2",                      
+                th2: "color3",                       
+                bh3: "color2",                       
+                th3: "color3",                       
+                bh4: "color2",                       
+                th4: "color3",                       
+                bbs: "color2",                       
+                tbs: "color3",                       
+                bkg: "color2",                       
+                tkg: "color5", 
+                benter: "color5",                   
+                tenter: "color3",                    
                 bnk: "color2",
                 tnk: "color3"
                 },
@@ -101,35 +101,35 @@ let state = {
             "Darkmode": { 
                 name: "黑暗", 
                 key_text_color: "color3", 
-                back_color: "color6",               // 候选栏背景
-                text_color: "color5",               // 编码文字
-                comment_text_color: "color3",       // 注解颜色
-                hilited_text_color: "color7",       // 高亮编码文字
-                hilited_back_color: "color1",       // 高亮编码背景 (拼音编码背景)
-                hilited_shadow_color: "color1",     // 高亮编码阴影
-                candidate_text_color: "color2",     // 候选项未选中文字
-                hilited_candidate_text_color: "color3", // 高亮候选项选中文字
-                hilited_candidate_back_color: "color5", // 高亮候选项选中背景
-                hilited_comment_text_color: "color3", // 高亮候选项选中注解       
-                keyboard_back_color: "color6",      // 键盘整体底色
-                key_back_color: "color7",           // 按键默认背景
+                back_color: "color6",               
+                text_color: "color5",               
+                comment_text_color: "color3",       
+                hilited_text_color: "color7",       
+                hilited_back_color: "color1",       
+                hilited_shadow_color: "color1",     
+                candidate_text_color: "color2",     
+                hilited_candidate_text_color: "color3", 
+                hilited_candidate_back_color: "color5", 
+                hilited_comment_text_color: "color3", 
+                keyboard_back_color: "color6",      
+                key_back_color: "color7",           
                 hilited_key_text_color:"color3",
                 text_back_color: "color7",
-                candidate_separator_color: "color5", //候选词分割线
-                bh1: "color7",                       // 第一行按键背景
-                th1: "color2",                       // 第一行文字
-                bh2: "color7",                      // 第二行按键背景
-                th2: "color2",                       // 第二行文字
-                bh3: "color7",                       // 第三行按键背景
-                th3: "color2",                       // 第三行文字
-                bh4: "color7",                       // 符号行背景
-                th4: "color2",                       // 符号行文字  
-                bbs: "color7",                       // 退格和Shift背景
-                tbs: "color2",                       // 退格和Shift文字
-                bkg: "color7",                       // 空格和次选背景
-                tkg: "color5", //空格文字
-                benter: "color5",                   // Enter背景
-                tenter: "color3",                    // Enter文字3
+                candidate_separator_color: "color5", 
+                bh1: "color7",                       
+                th1: "color2",                       
+                bh2: "color7",                      
+                th2: "color2",                       
+                bh3: "color7",                       
+                th3: "color2",                       
+                bh4: "color7",                       
+                th4: "color2",                       
+                bbs: "color7",                       
+                tbs: "color2",                       
+                bkg: "color7",                       
+                tkg: "color5", 
+                benter: "color5",                   
+                tenter: "color3",                    
                 bnk: "color7",
                 tnk: "color3"
                 }     
@@ -294,7 +294,7 @@ let state = {
                     share_text: { label: "分享文本", send: "Control+Alt+s" },
                     redo: { label: "重做", functional: false, send: "Control+Shift+z" },
                     undo: { label: "撤销", functional: false, send: "Control+z" },
-                    delimiter: { label: "分词", text: "'" }, // 处理单引号
+                    delimiter: { label: "分词", text: "'" }, 
                     F4: { label: "方案菜单", send: "F4" },
                     BackToPreviousSyllable: { label: "删音节", send: "Control+BackSpace" },
                     CommitRawInput: { label: "编码", send: "Control+Return" },

@@ -1,7 +1,4 @@
-/* ============================================================
- * style.css — 全部静态样式（由 test.html 拆分而来）
- * 注意：<style id="dynamic-theme"> 由 JS 在运行时填充，不在此文件中
- * ============================================================ */
+
 
 body { 
             font-family: 'Noto Sans SC',
@@ -45,12 +42,12 @@ body {
             flex: 1; 
             overflow-y: auto !important; 
             min-height: 0; 
-            padding-bottom: 50px; /* 增加底部留白*/
+            padding-bottom: 50px; 
         }
         .control-item {
             padding: 12px;
             margin-bottom: 8px;
-            background: rgba(30, 41, 59, 0.4); /* 稍微提亮一点背景 */
+            background: rgba(30, 41, 59, 0.4); 
             border-radius: 8px;
             border: 1px solid rgba(51, 65, 85, 0.5);
         }
@@ -96,19 +93,19 @@ body {
             cursor: pointer;
         }
 
-        /* 灵动岛 */
+        
         .dynamic-island {
             position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
             width: 20px; height: 20px; background: #000; border-radius: 20px; z-index: 50;
         }
-        /* 统一样式变量 */
+        
         :root { 
-            --font-key: 'Noto Sans SC', sans-serif;       /* 键盘主字 */
-            --font-popup: 'Noto Sans SC', sans-serif;     /* 气泡提示 */
-            --font-text: 'Noto Sans SC', sans-serif;      /* 拼音编码 */
-            --font-candidate: 'Noto Sans SC', sans-serif; /* 候选词 */
-            --font-comment: 'Noto Sans SC', sans-serif;   /* 编码提示 */
-            --font-symbol: 'Noto Sans SC', sans-serif;    /* 符号/角标 */
+            --font-key: 'Noto Sans SC', sans-serif;       
+            --font-popup: 'Noto Sans SC', sans-serif;     
+            --font-text: 'Noto Sans SC', sans-serif;      
+            --font-candidate: 'Noto Sans SC', sans-serif; 
+            --font-comment: 'Noto Sans SC', sans-serif;   
+            --font-symbol: 'Noto Sans SC', sans-serif;    
         }
         #preview-popup { font-family: var(--font-popup); }
         
@@ -298,7 +295,7 @@ body {
             position: absolute;
             top: 100px;
             bottom: 60px;
-            left: var(--right-tools-left, 400px); /* 由 11-init.js 按左栏真实宽度计算 */
+            left: var(--right-tools-left, 400px); 
             right: 0; 
             pointer-events: none; 
             z-index: 100;
@@ -332,7 +329,7 @@ body {
             transition: border-color 0.25s ease, box-shadow 0.25s ease, left 0.15s ease, top 0.15s ease;
         }
 
-        /* 调色板 / 映射板：保留之前的整列高度（撑满工具区） */
+        
         .glass-capsule.tall-panel { height: 100%; }
 
         .glass-capsule:hover {
@@ -340,7 +337,7 @@ body {
             box-shadow: 0 25px 50px -8px rgba(16,185,129,0.25);
         }
 
-        /* 拖拽状态 */
+        
         .glass-capsule.dragging {
             cursor: grabbing;
             z-index: 200;
@@ -527,7 +524,7 @@ body {
             width: 280px !important;
             display: flex !important;
             flex-direction: column !important;
-            height: auto !important; /* 让容器随内容撑开 */
+            height: auto !important; 
         }
 
 
@@ -1013,10 +1010,10 @@ body {
             z-index: 100;
             width: 120px;
             height: 120px;
-            background-color: #000; /* 增加底色防止透明 */
+            background-color: #000; 
         }
 
-/* ---- body 内联补充 ---- */
+
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
             .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
             .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 2px; }

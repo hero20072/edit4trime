@@ -1,7 +1,7 @@
-// ============================================================
-// 10-io.js — io
-// 由 test.html 拆分而来（无构建，经典脚本，按 01→11 顺序引入）
-// ============================================================
+
+
+
+
 
 function introduceSetting(key, label) {
         if (shownIntros.has(key) || !settingIntros[key]) return;
@@ -9,7 +9,7 @@ function introduceSetting(key, label) {
         addChatMessage('right', `这个“${label}”是干什么用的？`);
         
         setTimeout(() => {
-            addChatMessage('left', `**${label} 简介**：\n${settingIntros[key]}`);
+            addChatMessage('left', `**${label} 简介**：${settingIntros[key]}`);
         }, 800);
 
         shownIntros.add(key);
@@ -27,7 +27,7 @@ function addChatMessage(side, text, isCode = false, allowHtml = false) {
         
         const bubbleId = isCode ? `code-bubble-${Date.now()}` : '';
 
-        // 默认转义所有内容；仅受控静态 HTML（如导入重复键提示）显式传入 allowHtml
+        
         const safeText = allowHtml ? String(text) : escapeHtml(text);
         const content = isCode ? `<pre style="white-space: pre-wrap;">${safeText}</pre>` : safeText;
 
@@ -187,14 +187,14 @@ function exportYAML(isFull = true) {
         }
 
         if (isFull || selectedKeys.includes('preset_keys')) {
-            res.push("\npreset_keys:");
+            res.push("preset_keys:");
             Object.entries(out.preset_keys).forEach(([id, cfg]) => {
                 res.push(`  ${id}: ${toTrimeFlow(cfg)}`);
             });
         }
 
         if (isFull || selectedKeys.includes('preset_keyboards')) {
-            res.push("\npreset_keyboards:");
+            res.push("preset_keyboards:");
             Object.keys(out.preset_keyboards).forEach(kbId => {
                 const kb = out.preset_keyboards[kbId];
                 res.push(`  ${kbId}:`);
@@ -220,11 +220,11 @@ function exportYAML(isFull = true) {
                 indent: 2, 
                 lineWidth: -1 
             });
-            res.push("\n" + liquidBlock); 
+            res.push("" + liquidBlock); 
         }
 
         if (out.tool_bar && (isFull || selectedKeys.includes('tool_bar'))) {
-            res.push("\ntool_bar:");
+            res.push("tool_bar:");
             res.push(`  button_spacing: ${out.tool_bar.button_spacing}`);
             res.push(`  button_font: ${out.tool_bar.button_font}`);
             res.push(`  primary_button: ${toTrimeFlow(out.tool_bar.primary_button)}`);
@@ -248,7 +248,7 @@ function exportYAML(isFull = true) {
             });
         }
 
-        const finalYaml = res.join('\n');
+        const finalYaml = res.join('');
         const blob = new Blob([finalYaml], { type: 'text/yaml;charset=utf-8' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);

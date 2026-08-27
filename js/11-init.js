@@ -1,7 +1,7 @@
-// ============================================================
-// 11-init.js — init
-// 由 test.html 拆分而来（无构建，经典脚本，按 01→11 顺序引入）
-// ============================================================
+
+
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
         const colorUpload = document.getElementById('image-upload');
@@ -10,21 +10,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         const authorAvatar = document.getElementById('author-avatar');
         if (authorAvatar && AVATAR_BASE64) authorAvatar.src = AVATAR_BASE64;
-        // 将头像 base64 注入 CSS 变量，供聊天消息中的作者头像复用（单一数据源）
+        
         if (AVATAR_BASE64) document.documentElement.style.setProperty('--author-avatar-bg', `url("${AVATAR_BASE64}")`);
 
         initPanelDrag();
     })
 
-// ============================================================
-// 面板拖拽：调色板 / 映射板 可自由调整位置
-// ============================================================
-const PANEL_POS_KEY = 'trime-panel-positions-v2';
 
-// 各面板默认初始位置（仅调色板 / 映射板，左右并排）
+
+
+const PANEL_POS_KEY = 'trime-panel-positions-v3';
+
+
 const PANEL_DEFAULT_POS = {
         'palette': { left: 0, top: 0 },
-        'mapping': { left: 184, top: 0 }
+        'mapping': { left: 368, top: 0 }
     };
 
 function loadPanelPositions() {
@@ -56,7 +56,7 @@ function initPanelDrag() {
             if (header) header.addEventListener('mousedown', startPanelDrag);
         });
 
-        // 面板内容滚动时端口位置变化，需重绘连线
+        
         ['palette-container', 'mapping-col'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.addEventListener('scroll', requestDrawWires);
@@ -65,7 +65,7 @@ function initPanelDrag() {
 
 function startPanelDrag(e) {
         if (e.button !== 0) return;
-        if (e.target.closest('button')) return; // 标题栏按钮不触发拖拽
+        if (e.target.closest('button')) return; 
         e.preventDefault();
 
         const panel = e.currentTarget.closest('.glass-capsule');
@@ -113,12 +113,12 @@ window.onload = () => {
             currentLayout = draft.currentLayout || 'default';
         }
         extractCustomMappings();
-        // 合并草稿中保存的映射（含尚未接线、未写入 scheme 的新增映射），避免刷新丢失
+        
         if (draft && Array.isArray(draft.customMappings)) {
             draft.customMappings.forEach(m => { if (!customMappings.includes(m)) customMappings.push(m); });
         }
-        //
-        // 按左栏（aside）真实宽度计算「右侧工具」浮层的起始位置，替代硬编码 400px
+        
+        
         const asideEl = document.querySelector('aside');
         if (asideEl) {
             document.documentElement.style.setProperty('--right-tools-left', (asideEl.offsetWidth + 20) + 'px');
@@ -138,7 +138,7 @@ window.onload = () => {
 
         window.addEventListener('beforeunload', saveDraft);
 
-        // 「渲染选项」下拉：状态由各开关的默认值决定，初始化时同步一次样式
+        
         renderRenderDropdown();
 
         const importInput = document.getElementById('importFile');
@@ -149,33 +149,33 @@ window.onload = () => {
 
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    // let specificErrorMsg = ""; // 旧的报错逻辑不再需要，因为我们现在主要依靠自动修复
+                    
                     
                     try {
                         let textToParse = event.target.result;
 
-                        // 1. 预处理：解决 Trime 圈子带有 @ 符号的非标准别名
+                        
                         textToParse = textToParse.replace(/([*&][a-zA-Z0-9_]+)@([a-zA-Z0-9_]+)/g, '$1_AT_$2');
 
-                        // 2. 预处理：自动解决土豆 🥔 等 Emoji 占位符（针对非标准字符开头的键）
+                        
                         let dummyCounter = 1;
                         textToParse = textToParse.replace(/^(\s*)([^\x00-\xffa-zA-Z0-9_]{1,2})(\s*:)/gm, (match, p1, p2, p3) => {
                             return `${p1}${p2}_auto_${dummyCounter++}${p3}`;
                         });
 
                         let imported;
-                        let retries = 100; // 增加重试次数，以应对大量重复键
-                        let dupCounter = 0; // 重复键计数器
-                        let showDuplicateWarning = false; // 标记是否触发了重复键修复
+                        let retries = 100; 
+                        let dupCounter = 0; 
+                        let showDuplicateWarning = false; 
 
-                        // --- 智能自愈循环解析 ---
+                        
                         while (retries > 0) {
                             try {
                                 imported = jsyaml.load(textToParse);
-                                break; // 成功则跳出循环
+                                break; 
                             } catch (err) {
                                 if (err.name === 'YAMLException') {
-                                    // 拦截 1：未定义的引用别名 (自动修复)
+                                    
                                     if (err.message.includes('unidentified alias')) {
                                         const match = err.message.match(/unidentified alias "([^"]+)"/);
                                         if (match && match[1]) {
@@ -285,7 +285,7 @@ window.onload = () => {
                                     您的文件中包含重复的键（Duplicated Keys）。同文输入法(Trime)通常会忽略重复项，但标准YAML语法不允许。<br><br>
                                     <b>工坊已自动为您忽略这些重复项并完成读取。</b><br>
                                     如果遇到极个别文件依然无法上传，建议使用文本编辑器检查是否有完全重复的配置行，或使用语法检查工具：<br>
-                                    <a href="https://www.yamlvalidator.org/zh" target="_blank" style="color: #60a5fa; text-decoration: underline;">https://www.yamlvalidator.org/zh</a>
+                                    <a href="https:
                                 </div>
                             `;
                             setTimeout(() => addChatMessage('left', warningMsg, false, true), 300);

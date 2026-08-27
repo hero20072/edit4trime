@@ -1,7 +1,7 @@
-// ============================================================
-// 01-config.js — config
-// 由 test.html 拆分而来（无构建，经典脚本，按 01→11 顺序引入）
-// ============================================================
+
+
+
+
 
 const ColorEngine = {
         toOklab(r, g, b) {
@@ -50,12 +50,12 @@ const SYS_MAPPINGS = Array.from(CORE_KEYS)
 const BASE_DARK_COLOR = "rgba(20, 30, 45, 0.45)"
 
 const settingIntros = {
-        // --- 核心开关 (General) ---
+        
         'style.auto_caps': " **自动句首大写**：当你在输入英文时，开启此项会在每段话的开头自动切换到大写字母，非常适合习惯写英文长句的用户。",
         'style.proximity_correction': " **边缘容错**：这是 Trime 的黑科技。如果你手指较粗容易点错位置，它会根据你点击的坐标和拼音概率自动纠错。建议开启，能大幅提升盲打准确率！",
         'style.reset_ascii_mode': " **状态重置**：开启后，每次收起键盘再打开，都会强制回到中文输入状态，防止你忘了上次是在写英文。",
 
-        // --- 全局字体 (Fonts) ---
+        
         'style.key_font': " **键盘字体**：主键盘按键上显示的字母/符号字体。建议使用等宽字体以获得整齐的视觉效果。",
         'style.candidate_font': " **候选字体**：候选词区（选词栏）显示的文字字体。建议使用字重稍大的字体，看起来更清晰。",
         'style.comment_font': " **编码提示字体**：在候选词旁边显示的五笔/形码/音形提示的字体，通常设置得比候选字小一些。",
@@ -63,32 +63,32 @@ const settingIntros = {
         'style.symbol_font': " **符号/角标字体**：按键右上角或左下角那些小符号的字体。",
         'style.popup_font': " **按键提示字体**：手指按下按键时，上方弹出的那个大气泡里的文字字体。",
 
-        // --- 物理参数 (Appearance) ---
+        
         'style.keyboard_height': " **竖屏高度**：这是键盘在手机竖屏时的总高度。太高会遮挡聊天内容，太低按键会显得局促。一般建议在 240-280 之间。",
         'style.keyboard_height_land': " **横屏高度**：横屏玩游戏或打字时，键盘占用的垂直空间。建议设置得比竖屏低很多，否则会占满全屏。",
         'style.vertical_correction': " **竖直方向触摸位置校正**：为了提升打字手感，可将按键的实际触摸位置相对其显示位置上下偏移一点点（默认值-10，上偏为正，下偏为负，为0则不偏移）。",
 
         
-        // --- 编码区 (Preedit) ---
+        
         'preedit.foreground.font_size': " **编码字号**：正在输入的拼音的大小。如果你的视力较好，可以调小一点让布局更紧凑。",
         'preedit.horizontal_padding': " **编码区横向内边距**：拼音文字距离编码栏左边框的距离。调大它可以让拼音看起来不那么拥挤。",
         'preedit.alpha': " **编码区背景透明度**：0 为完全透明，1 为完全不透明。如果你想看到键盘下方的壁纸，可以调低它。",
         'preedit.top_end_radius': " **编码区顶部圆角**：让编码栏的上方两个角变得圆润。如果你的键盘整体是圆润风，建议调大到 14 以上。",
 
-        // --- 悬浮窗口 (Window Mode) ---
+        
         'window.alpha': " **窗口透明度**：控制悬浮候选窗口的透明度，营造毛玻璃或极简视觉感。",
         'window.min_width': " **窗口最小宽度**：防止只有一两个候选词时窗口太窄，设置一个最小值可以让窗口比例更协调。",
         'window.corner_radius': " **窗口圆角**：悬浮窗四个角的弧度。大圆角看起来更现代，小圆角更复古。",
         'window.foreground.text_font_size': " **悬浮候选字号**：在悬浮窗口模式下，候选词显示的大小。建议比内嵌模式稍大一些。",
 
-        // --- 候选栏 (Candidate Bar) ---
+        
         'style.candidate_view_height': " **候选栏高度**：这是内嵌在键盘顶部的选词栏高度。它决定了选词时的触控面积。",
         'style.candidate_text_size': " **候选字号**：选词栏文字的大小。这是输入法最核心的参数之一，建议在 18-24 之间尝试。",
         'style.candidate_spacing': " **候选词间距**：不同候选词之间的水平距离，防止误选相邻的词。",
         'style.candidate_padding': " **候选项内边距**：单个词语四周留出的空白空间。调大它可以增加“留白感”。",
         'style.comment_on_top': " **形码提示位置**：你可以决定将编码提示（如五笔码）放在词语的右边，还是词语的正上方。",
 
-        // --- 按键物理参数 (Keys) ---
+        
         'style.key_height': " **单键高度**：每行按键的高度。调高它可以减少上下行误触，但也增加了键盘总高。",
         'style.vertical_gap': " **行间距**：键盘行与行之间的缝隙。增加间距可以让键盘布局有“悬浮感”。",
         'style.horizontal_gap': " **列间距**：按键与按键左右之间的缝隙。如果你用的是带框的皮肤，这个参数非常重要。",
@@ -96,13 +96,13 @@ const settingIntros = {
         'style.key_text_size': " **按键字号**：按键上字母的大小。太大会显得拥挤，太小则看不清。",
         'style.symbol_text_size': " **符号/角标字号**：按键右上角小符号的大小，通常建议设为按键字号的一半左右。",
 
-        // --- 按键提示 (Popup) ---
+        
         'style.popup_width': " **气泡宽度**：按下按键时弹出的提示框宽度。建议比按键稍宽一些。",
         'style.popup_height': " **气泡高度**：气泡的垂直高度。它需要足够高，才不会被你的手指完全挡住。",
         'style.popup_bottom_margin': " **离键距离**：气泡底部距离按键顶部的距离。调大它会让气泡“飞”得更高，防止手指遮挡。",
         'style.popup_text_size': " **气泡字号**：气泡里文字的大小。通常设得很大，让你余光一扫就知道点对了没。",
 
-        // --- 配色属性 (Colors/Schemes) ---
+        
         'text_back_color': " **编码栏背景**：这就是你正在输入的拼音区域（Preedit）的底色。你可以设为透明或者与键盘底色不同的颜色。",
         'text_color': " **输入符/光标颜色**：在拼音末尾那个指示位置的小三角形或竖线的颜色。",
         'hilited_text_color': " **编码文字颜色**：拼音字母本身的颜色。建议与背景色形成高对比度。",
@@ -114,7 +114,7 @@ const settingIntros = {
         'hilited_candidate_back_color': " **选中项背景**：第一个候选词（默认选中项）的背景色。这是皮肤最醒目的“主题色”位置。",
         'candidate_separator_color': " **候选分割线**：不同词语之间若有分割线，这是它的颜色。设为透明可以隐藏分割线。",
         
-         // --- 配色方案管理专有项 ---
+         
         'scheme_manager_intro': " **配色方案管理**：Trime 支持在一个皮肤文件里存入多套配色。你可以点击【+ 新增配色】来尝试不同的设计风格。最重要的是，皮肤必须有一个名为 `default` 的方案作为基准。",
         'scheme_type_select': " **用途 (Scheme Type)**：\n- **默认配色 (default)**：输入法启动时首选的配色。\n- **自定义配色**：你可以创建如 `my_red_theme` 这种方案，然后通过按键功能（Color_switch）在多个方案间一键切换。",
         'scheme_id_input': " **英文标识名 (ID)**：这是 YAML 代码中引用该方案的“唯一身份证”。\n- 必须是英文或数字（如 `solarized_dark`）。\n- 修改 ID 会同步更新代码中的引用。注意，`default` 是特殊 ID，通常不建议改名。",
@@ -266,12 +266,12 @@ const CHECKER_SVG = "url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2
 const fontVarMap = {
         'style.key_font': '--font-key',
         'style.popup_font': '--font-popup',
-        'style.text_font': '--font-text',       // 对应编码区
+        'style.text_font': '--font-text',       
         'style.candidate_font': '--font-candidate',
         'style.comment_font': '--font-comment',
         'style.symbol_font': '--font-symbol',
-        'style.latin_font': '--font-key',       // 暂时兜底
-        'style.hanb_font': '--font-candidate'   // 暂时兜底
+        'style.latin_font': '--font-key',       
+        'style.hanb_font': '--font-candidate'   
     }
 
 const STORAGE_KEY = 'trime-skin-editor-draft'

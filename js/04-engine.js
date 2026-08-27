@@ -1,9 +1,9 @@
-// ============================================================
-// 04-engine.js — engine
-// 由 test.html 拆分而来（无构建，经典脚本，按 01→11 顺序引入）
-// ============================================================
 
-// 统一设置工具按钮的“激活/未激活”样式与文案（多个 toggle 函数复用）
+
+
+
+
+
 function setToolBtnState(btn, isActive, onCls, offCls, onText, offText) {
         if (!btn) return;
         btn.classList.remove(...onCls);
@@ -21,7 +21,7 @@ function copyQQGroup(el) {
         });
     }
 
-// 「渲染选项」下拉菜单：状态同步（开合用 CSS 悬停控制）
+
 function renderRenderDropdown() {
         const items = [
             ['render-dd-popup', isGlobalPopupEnabled],
@@ -44,12 +44,12 @@ function toggleShowSpacers() {
 
 function toggleCapsules() {
         if (currentTab !== 'layout') {
-            // 在非「配色|布局」页点击：视为“打开面板”，强制开启并跳到布局页让面板必定显示
+            
             isCapsulesEnabled = true;
             switchTab('layout');
-            return; // switchTab 内部已调用 updateCapsuleVisibility
+            return; 
         }
-        // 在布局页点击：正常开/关切换
+        
         isCapsulesEnabled = !isCapsulesEnabled;
         updateCapsuleVisibility();
     }
@@ -71,7 +71,7 @@ function updateCapsuleVisibility() {
         }
     }
 
-// 共享的键盘行划分 + 行高分配计算（renderGlobalKeyboard 与 updateSizeCalculator 共用）
+
     function computeKeyboardLayout(layout, s) {
         if (!layout || !layout.keys) return { rows: [], scaledVerticalGap: 0, finalAutoIndex: -1 };
 
@@ -484,21 +484,21 @@ function updateCssVariablesOnly() {
         if (!scheme) return;
 
         const keysToMap = [
-        // 候选区核心
+        
         'candidate_text_color',
         'comment_text_color',
         'candidate_separator_color', 
-        // 候选区高亮
+        
         'hilited_candidate_back_color',
 
         'hilited_candidate_text_color',
         'hilited_comment_text_color',
-        // 编码区核心
+        
         'text_back_color',
         'text_color',
         'hilited_text_color',
         'hilited_back_color',
-        // 键盘核心
+        
         'keyboard_back_color',
         'key_back_color',
         'key_text_color',
@@ -509,32 +509,32 @@ function updateCssVariablesOnly() {
         'back_color'
     ];
 
-        let css = `:root {\n`;
+        let css = `:root {`;
 
         Object.entries(state.colors).forEach(([id, val]) => {
-            css += `  --${id}: ${argbToCss(val)};\n`;
+            css += `  --${id}: ${argbToCss(val)};`;
         });
 
         const mappedKeys = [...keysToMap, ...customMappings.filter(k => !keysToMap.includes(k))];
         mappedKeys.forEach(k => {
             const v = scheme[k];
             if (!v) return;
-            if (v.startsWith('0x')) css += `  --${k}: ${argbToCss(v)};\n`;
-            else css += `  --${k}: var(--${v});\n`;
+            if (v.startsWith('0x')) css += `  --${k}: ${argbToCss(v)};`;
+            else css += `  --${k}: var(--${v});`;
         });
 
-        // 补充：为 scheme 中其余颜色键生成 CSS 变量（alphabet_back / enter_back / 数字色板键等）
+        
         Object.keys(scheme).forEach(k => {
             if (keysToMap.includes(k) || customMappings.includes(k)) return;
             const v = scheme[k];
             if (v === undefined || v === null || v === '') return;
             if (typeof v === 'number') {
-                css += `  --${k}: ${argbToCss(v)};\n`;
+                css += `  --${k}: ${argbToCss(v)};`;
             } else if (typeof v === 'string') {
                 if (v.startsWith('0x') || v.startsWith('#')) {
-                    css += `  --${k}: ${argbToCss(v)};\n`;
+                    css += `  --${k}: ${argbToCss(v)};`;
                 } else if (state.colors[v]) {
-                    css += `  --${k}: var(--${v});\n`;
+                    css += `  --${k}: var(--${v});`;
                 }
             }
         });

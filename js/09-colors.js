@@ -1,7 +1,7 @@
-// ============================================================
-// 09-colors.js — colors
-// 由 test.html 拆分而来（无构建，经典脚本，按 01→11 顺序引入）
-// ============================================================
+
+
+
+
 
 function triggerPickr(colorId) {
         const anchor = document.getElementById(`picker-${colorId}`);
@@ -299,7 +299,7 @@ let currentGradMid = "0xFFFFFFFF"
 
 let currentGradEnd = "0xFF000000"
 
-// 将弹窗显示在按钮正下方，且不超过视口左右边界（多个浮层弹窗复用）
+
 function positionPopupUnderBtn(btn, popup, width) {
         const rect = btn.getBoundingClientRect();
         let left = rect.left;
@@ -337,7 +337,7 @@ function toggleSizeCalculator() {
 
         const isHidden = panel.classList.contains('hidden');
         if (isHidden) {
-            positionPopupUnderBtn(btn, panel, 320); // w-80 = 320px
+            positionPopupUnderBtn(btn, panel, 320); 
             panel.classList.remove('hidden');
             updateSizeCalculator();
         } else {
@@ -569,7 +569,7 @@ function addAllGradientColors() {
 function clearGradientTool() {
         midEnabled = false;
         currentGradStart = "0xFFFF69B4";
-        currentGradMid = "0xFFffffff"; // 默认中间色
+        currentGradMid = "0xFFffffff"; 
         currentGradEnd = "0xFF000000";
         if (gradPickrStart) {
             gradPickrStart.setColor(argbToCss(currentGradStart));
@@ -632,7 +632,7 @@ function toggleColorPicker() {
 
         const isHidden = panel.classList.contains('hidden');
         if (isHidden) {
-            positionPopupUnderBtn(btn, panel, 320); // w-80 = 320px
+            positionPopupUnderBtn(btn, panel, 320); 
             panel.classList.remove('hidden');
         } else {
             panel.classList.add('hidden');
@@ -644,7 +644,7 @@ function toggleColorPicker() {
             '上传取色', '上传取色');
     }
 
-// 处理图片上传
+
     function handleImageUpload(e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -687,7 +687,7 @@ function toggleColorPicker() {
         reader.readAsDataURL(file);
     }
 
-// 放大镜监听器只注册一次，避免每次上传重复叠加
+
     function bindMagnifierOnce() {
         if (magnifierBound) return;
         magnifierBound = true;
@@ -774,46 +774,46 @@ function addAllPickedColors() {
 function updateMagnifier(event, sourceCanvas, sourceCtx) {
         if (!magnifierCanvas || !sourceCanvas) return;
 
-        // 初始化放大镜画布分辨率，使其内部像素与 CSS 尺寸保持一致
+        
         if (magnifierCanvas.width !== MAGNIFIER_SIZE) {
             magnifierCanvas.width = MAGNIFIER_SIZE;
             magnifierCanvas.height = MAGNIFIER_SIZE;
         }
 
         const rect = sourceCanvas.getBoundingClientRect();
-        // 获取鼠标在源画布上的 CSS 像素坐标（热点）
+        
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
 
-        // 转换为图片实际内部的像素坐标
+        
         const scaleX = sourceCanvas.width / rect.width;
         const scaleY = sourceCanvas.height / rect.height;
         const pixelX = mouseX * scaleX;
         const pixelY = mouseY * scaleY;
 
-        // 清除画布并填充黑色底色
+        
         magnifierCtx.clearRect(0, 0, MAGNIFIER_SIZE, MAGNIFIER_SIZE);
         magnifierCtx.fillStyle = '#020617';
         magnifierCtx.fillRect(0, 0, MAGNIFIER_SIZE, MAGNIFIER_SIZE);
 
-        // 关闭平滑处理，保持放大后的像素颗粒感
+        
         magnifierCtx.imageSmoothingEnabled = false;
 
         magnifierCtx.save();
-        // 将画布的绘制中心移动到放大镜中心位置
+        
         magnifierCtx.translate(MAGNIFIER_SIZE / 2, MAGNIFIER_SIZE / 2); 
-        // 应用放大倍率
+        
         magnifierCtx.scale(ZOOM_FACTOR, ZOOM_FACTOR); 
-        // 反向偏移源图像，使鼠标所在的像素点精确对齐到放大镜中心
+        
         magnifierCtx.translate(-pixelX, -pixelY); 
         
         magnifierCtx.drawImage(sourceCanvas, 0, 0);
         magnifierCtx.restore();
 
-        // 绘制中心指示器
+        
         const center = MAGNIFIER_SIZE / 2;
         
-        // 1. 绘制辅助十字线（避开中心实心点）
+        
         magnifierCtx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
         magnifierCtx.lineWidth = 1;
         magnifierCtx.beginPath();
@@ -827,16 +827,16 @@ function updateMagnifier(event, sourceCanvas, sourceCtx) {
         magnifierCtx.lineTo(center, center + 4);
         magnifierCtx.stroke();
 
-        // 2. 绘制实心取色点（红色填充，白色描边，以保证在各种颜色下都能看清）
+        
         magnifierCtx.beginPath();
         magnifierCtx.arc(center, center, 2.5, 0, 2 * Math.PI);
-        magnifierCtx.fillStyle = '#ef4444'; // 红色实心点
+        magnifierCtx.fillStyle = '#ef4444'; 
         magnifierCtx.fill();
         magnifierCtx.lineWidth = 1.5;
-        magnifierCtx.strokeStyle = '#ffffff'; // 白色描边
+        magnifierCtx.strokeStyle = '#ffffff'; 
         magnifierCtx.stroke();
 
-        // 设置放大镜的显示位置：以鼠标 X 轴居中，Y 轴在鼠标上方悬浮避免手指/鼠标遮挡
+        
         const magnifierLeft = mouseX - MAGNIFIER_SIZE / 2;
         const magnifierTop = mouseY - MAGNIFIER_SIZE - 15; 
 
