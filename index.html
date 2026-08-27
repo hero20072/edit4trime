@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trime配置编辑</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+    <style id="dynamic-theme"></style>
+</head>
+<body>
+    <header class="h-12 border-b border-slate-800 bg-slate-900 px-4 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <div id="links-dropdown" class="relative group">
+                <button class="flex items-center gap-3 bg-[#fb7299] hover:bg-[#ff85a5] text-white pl-2 pr-3 py-1 rounded-full text-sm font-bold transition-all shadow-lg hover:shadow-pink-500/30 group-hover:-translate-y-0.5">
+                    <div class="bg-white/20 p-0.5 rounded-full"><img id="author-avatar" src="" class="w-6 h-6 object-cover rounded-full" alt="icon"></div>
+                    <span class="leading-none">hero20072</span>
+                    <span class="text-sm text-white/70 leading-none">▾</span>
+                </button>
+                <div id="links-dd-panel" class="hd-panel invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity duration-150 absolute left-0 top-full pt-2 z-[1500]">
+                    <div class="w-36 bg-slate-900/95 backdrop-blur-xl border border-slate-700 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-1">
+                        <a href="https://space.bilibili.com/82516644" target="_blank" class="hd-item">B站主页</a>
+                        <a href="https://hero20072.github.io/edit4weasel/" target="_blank" class="hd-item">小狼毫</a>
+                        <a href="https://hero20072.github.io/KeycapWorkshop/" target="_blank" class="hd-item">键帽工坊</a>
+                        <a href="javascript:void(0)" onclick="copyQQGroup(this)" class="hd-item" id="qq-group-item">交流Q群</a>
+                    </div>
+                </div>
+            </div>
+
+            <button id="capsule-toggle-btn" onclick="toggleCapsules()" 
+                class="ml-8 tool-btn bg-orange-600 text-white">
+                调色映射
+            </button>
+            
+            <button id="grad-tool-btn" onclick="toggleGradientTool()" 
+                class="ml-1 tool-btn bg-slate-800 text-slate-500">
+                渐变生成
+            </button>
+            
+            <button id="color-picker-btn" onclick="toggleColorPicker()" 
+                class="ml-1 tool-btn bg-slate-800 text-slate-500">
+                上传取色
+            </button>
+            
+            <button id="size-calc-btn" onclick="toggleSizeCalculator()" 
+                class="ml-1 tool-btn bg-slate-800 text-slate-500">
+                尺寸计算
+            </button>
+            
+            <div id="render-dropdown" class="ml-1 relative group">
+                <button id="render-dropdown-btn" 
+                    class="tool-btn bg-slate-800 text-slate-500">
+                    渲染选项 ▾
+                </button>
+                <div id="render-dropdown-panel" class="render-dd-panel invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity duration-150 absolute right-0 top-full pt-2 z-[1500]">
+                    <div class="w-52 bg-slate-900/95 backdrop-blur-xl border border-slate-700 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-1.5">
+                        <div id="render-dd-popup" class="render-dd-item" onclick="toggleGlobalPopup()">
+                            <span>气泡预览</span><span class="render-dd-sw"></span>
+                        </div>
+                        <div id="render-dd-lock" class="render-dd-item" onclick="togglePopupLock()">
+                            <span>锁定气泡</span><span class="render-dd-sw"></span>
+                        </div>
+                        <div id="render-dd-win" class="render-dd-item" onclick="toggleWindowMode()">
+                            <span>悬浮候选</span><span class="render-dd-sw"></span>
+                        </div>
+                        <div id="render-dd-keylock" class="render-dd-item" onclick="toggleKeyEditorLock()">
+                            <span>单键锁定</span><span class="render-dd-sw"></span>
+                        </div>
+                        <div id="render-dd-spacer" class="render-dd-item" onclick="toggleShowSpacers()">
+                            <span>显示占位</span><span class="render-dd-sw"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <div id="gradient-popup" class="hidden absolute w-80 z-[2000] bg-slate-900/95 backdrop-blur-xl border border-slate-700 p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                <div class="flex justify-between items-center mb-4">
+                    <button onclick="clearMidColor()" class="text-[14px] text-blue-500 hover:text-white mr-2">清空中间色</button>
+                    <button onclick="clearGradientTool()" class="text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-2 py-0.5 rounded">重置</button>
+
+                </div>
+                
+            <div class="flex flex-col gap-3 mb-4">
+    
+            <div class="flex items-center justify-between gap-3">
+                <span class="text-[12px] text-slate-500">阶数</span>
+                <div class="flex-1 flex flex-col items-center">
+                    <input type="range" id="grad-steps" min="3" max="16" value="10" 
+                        class="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer mb-2 accent-purple-500"
+                        oninput="document.getElementById('grad-num').innerText = this.value + ' 阶过渡'; updateGradientPreview()">
+                    <span id="grad-num" class="text-[14px] text-slate-400 font-mono">10 阶过渡</span>
+                </div>
+            </div>
+    
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex flex-col items-center gap-1">
+                    <div id="grad-start-picker" class="w-10 h-10 rounded-full border-2 border-white/20 cursor-pointer shadow-lg transition-transform active:scale-90"></div>
+                    <span class="text-[12px] text-slate-500">起始色</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                    <div id="grad-mid-picker" class="w-10 h-10 rounded-full border-2 border-white/20 cursor-pointer shadow-lg transition-transform active:scale-90"></div>
+                    <span class="text-[12px] text-slate-500">中间色</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                    <div id="grad-end-picker" class="w-10 h-10 rounded-full border-2 border-white/20 cursor-pointer shadow-lg transition-transform active:scale-90"></div>
+                    <span class="text-[12px] text-slate-500">结束色</span>
+                </div>
+            </div>
+        </div>
+
+                <div id="grad-preview" class="preview-bar h-12 w-full rounded-lg overflow-hidden flex mb-4 border border-white/5"></div>
+
+                <button onclick="addAllGradientColors()" class="w-full py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-[11px] text-white font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
+                    批量导入至调色板
+                </button>
+            </div>
+        </div>
+
+        <div id="color-picker-panel" class="hidden absolute w-80 z-[2000] bg-slate-900/95 backdrop-blur-xl border border-slate-700 p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-sm font-bold text-yellow-400">上传取色器</span>
+                <div class="flex gap-2">
+                    <button onclick="clearPickedColors()" class="text-xs text-red-400 hover:text-red-300 border border-red-500/30 px-2 py-0.5 rounded">清空色块</button>
+
+                </div>
+            </div>
+            
+            <input type="file" id="image-upload" accept="image/*" class="mb-2 text-xs text-slate-300 w-full" />
+            <div class="relative mb-4">
+                <canvas id="color-canvas" class="w-full h-auto border border-slate-600 rounded" style="display: none;"></canvas>
+
+                <canvas id="magnifier-canvas"></canvas>
+            </div>
+            <div id="color-swatches" class="flex flex-wrap gap-2 mb-2 min-h-[40px] max-h-24 overflow-y-auto p-1 border border-slate-700 rounded bg-slate-800/30">
+  
+            </div>
+            <button onclick="addAllPickedColors()" class="w-full py-2  bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl text-[11px] text-white font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
+            批量导入至调色板
+        </button>
+        
+        </div>
+
+    <div id="size-calculator-panel" class="hidden absolute w-80 z-[2000] bg-slate-900/95 backdrop-blur-xl border border-slate-700 p-4 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-sm font-bold text-indigo-400">尺寸计算器</span>
+            <button onclick="toggleSizeCalculator()" class="text-xs text-slate-400 hover:text-white border border-slate-600 px-2 py-0.5 rounded">关闭</button>
+        </div>
+    
+    
+    <div id="size-display" class="space-y-3 text-sm max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+
+        </div>
+    <button onclick="updateSizeCalculator()" class="w-full mt-4 py-2 bg-indigo-600 rounded-xl text-xs text-white font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all">
+        重新计算
+    </button>
+</div>
+
+
+
+        <div class="flex gap-2 items-center">
+            <button onclick="document.getElementById('importFile').click()" class="px-3 py-1 bg-slate-800 rounded text-sm text-slate-300 border border-slate-700">导入</button>
+            <input type="file" id="importFile" class="hidden" accept=".yaml,.txt">
+            
+            <button onclick="exportYAML(true)" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 transition-colors rounded text-sm text-white">完整导出</button>
+            
+            <div class="relative inline-block">
+                <button onclick="togglePartialExportPopup()" class="px-3 py-1 bg-teal-600 hover:bg-teal-500 transition-colors rounded text-sm text-white">部分导出</button>
+                <div id="partial-export-popup" class="hidden absolute top-full right-0 mt-2 w-52 bg-slate-800 border border-slate-600 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-[9999] p-3 text-left">
+                    <div class="text-xs text-slate-400 mb-2 border-b border-slate-700 pb-2 font-bold tracking-wider">选择要导出的结构：</div>
+                    <div class="flex flex-col gap-2 max-h-56 overflow-y-auto custom-scrollbar text-[13px] text-slate-200 mb-3">
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="style" checked class="w-4 h-4 accent-emerald-500"> style (键盘尺寸)</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="preedit" checked class="w-4 h-4 accent-emerald-500"> preedit (拼音区)</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="window" checked class="w-4 h-4 accent-emerald-500"> window (悬浮窗)</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="colors" checked class="w-4 h-4 accent-emerald-500"> colors (调色板)</label>
+
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white">
+                            <input type="checkbox" value="preset_color_schemes" checked class="w-4 h-4 accent-emerald-500" 
+                                onchange="if(this.checked) document.querySelector('#partial-export-popup input[value=\'colors\']').checked = true;"> 
+                            preset_color_schemes(配色方案)
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="preset_keyboards" checked class="w-4 h-4 accent-emerald-500"> preset_keyboards（键盘布局）</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="preset_keys" class="w-4 h-4 accent-emerald-500"> preset_keys（预设按键）</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="liquid_keyboard" class="w-4 h-4 accent-emerald-500"> liquid_keyboard（液体键盘）</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="fallback_colors" class="w-4 h-4 accent-emerald-500"> fallback_colors（备用颜色）</label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-white"><input type="checkbox" value="tool_bar" class="w-4 h-4 accent-emerald-500"> tool_bar（工具栏）</label>
+                    </div>
+                    <button onclick="exportYAML(false)" class="w-full py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded transition-all active:scale-95 shadow-lg">确定导出</button>
+                </div>
+        </div>
+
+        <button onclick="if(confirm('确定清除本地草稿？')){try{window.removeEventListener('beforeunload', saveDraft);}catch(e){} localStorage.removeItem('trime-skin-editor-draft'); location.reload();}" class="px-3 py-1 bg-slate-700 rounded text-sm text-slate-400 hover:text-white transition-colors">清草稿</button>
+        </div>
+
+        
+    </header>
+
+    <div class="flex-1 flex overflow-hidden">
+
+        <aside class="w-[380px] border-r border-slate-800 bg-slate-900 flex flex-col shadow-xl">
+            <div class="text-center py-2 px-2 text-sm text-slate-500 border-b border-slate-800/50">
+                内置数据基于官方tongwenfeng.trime.yaml修改<br>请尊重yaml作者，不要修改作者信息。
+            </div>
+            <div class="flex border-b border-slate-800 shrink-0">
+                <button onclick="switchTab('general')" id="tab-general" class="tab-btn flex-1 py-3 text-[14px] font-bold uppercase">通用设置</button>
+                <button onclick="switchTab('appearance')" id="tab-appearance" class="tab-btn flex-1 py-3 text-[14px] font-bold uppercase">键盘尺寸</button>
+                <button onclick="switchTab('layout')" id="tab-layout" class="tab-btn active flex-1 py-3 text-[14px] font-bold uppercase">配色 | 布局</button>
+            </div>
+            <div id="editor-viewport" class="flex-1 overflow-y-auto"></div>
+        </aside>
+
+
+        <main class="flex-1 bg-[#020617] relative flex items-center justify-center p-4">
+            <div class="phone-mockup">
+                <div class="h-6 flex justify-between px-5 pt-1.5 items-center opacity-100">
+                    <span class="text-[14px] font-bold text-black">12:34</span>
+                    <div class="dynamic-island"></div>
+                </div>
+  
+                <div id="phone-top-area" class="flex-1 relative overflow-hidden bg-[#ededed]">
+                    <div id="chat-viewport"></div>
+                </div>
+
+                <div id="global-keyboard-container" class="shrink-0 relative bg-slate-300">
+                    <div id="preview-preedit" class="bg-black/80 flex items-center px-4 text-slate-500 text-sm font-mono overflow-hidden">pinyin</div>
+                    <div id="preview-candidate-bar" class="bg-white flex items-center px-2 overflow-hidden"></div>
+                    <div id="global-keyboard-viewport" class="relative"></div>
+  
+                    <div id="preview-popup" class="hidden absolute bg-white border border-slate-300 shadow-xl rounded flex items-center justify-center font-bold text-slate-800 z-50 pointer-events-none transform -translate-x-1/2 transition-all">Q</div>
+                    
+                    <div id="preview-window" class="hidden absolute bg-white border border-slate-200 shadow-xl rounded-lg p-2 z-50 transition-all" style="left: 28%; top: -85px; transform: translateX(-50%); min-width: 180px;">
+                    <div id="win-preedit" class="text-xs text-slate-400 mb-1 border-b pb-1">a</div>
+                    <div id="win-candidates" class="text-sm font-medium text-slate-800">1.啊 2.安装</div>
+                </div>                
+                </div>
+            </div>
+ 
+            <div id="key-editor-panel">
+            </div>
+     </main>
+
+        <div id="right-tools-container">
+  
+            <svg id="wire-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-20">
+                <defs>
+                    <linearGradient id="gradWire" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#EAE700" />
+                        <stop offset="100%" stop-color="#B959E7" stop-opacity="0.9" />
+                    </linearGradient>
+                </defs>
+                <path id="temp-wire" class="wire-path" style="display:none; stroke:#EAE700; stroke-width:4; stroke-dasharray: 6,6; animation: dash 1s linear infinite;"></path>
+            </svg>
+
+    
+            <!-- 调色板 -->
+            <aside class="glass-capsule tall-panel z-50" data-panel="palette">
+                <div class="capsule-header">
+                    <span class="capsule-title-text">调色板</span>
+                    <button onclick="addNewColor()" class="bg-pink-600 hover:bg-pink-500 text-white w-5 h-5 rounded flex items-center justify-center text-[14px] font-bold shadow-lg shadow-pink-500/30 transition-all hover:scale-110">+</button>
+                </div>
+                <div id="palette-container"></div>
+            </aside>
+
+  
+            <!-- 映射板 -->
+            <aside class="glass-capsule tall-panel z-50" data-panel="mapping">
+                <div class="capsule-header">
+                    <span class="capsule-title-text">映射板</span>
+                    <button onclick="addNewMapping()" class="bg-emerald-600 hover:bg-emerald-500 text-white w-5 h-5 rounded flex items-center justify-center text-[14px] font-bold shadow-lg shadow-emerald-500/30 transition-all hover:scale-110">+</button>
+                </div>
+                <div id="mapping-col">
+    
+                </div>
+            </aside>
+        </div>
+
+  
+        <div id="mapping-popup">
+   
+            <div class="popup-header-row">
+                <span id="popup-mapping-name">mapping_name</span>
+                <div class="popup-close-btn" onclick="document.getElementById('mapping-popup').style.display='none'">✕</div>
+            </div>
+
+       
+            <div id="popup-edit-area">
+                <input type="text" id="popup-rename-input" placeholder="重命名..." autocomplete="off">
+                <button onclick="renameMappingFromPopup()" class="popup-action-btn">改名</button>
+            </div>
+
+   
+            <div class="batch-label" id="popup-batch-label">批量设置颜色</div>
+            <div class="batch-grid" id="popup-batch-grid">
+                <button onclick="triggerBatchMode('key_back_color')" class="batch-btn bg-emerald ">背景</button>
+                <button onclick="triggerBatchMode('hilited_key_back_color')" class="batch-btn bg-amber">按下背景</button>
+                <button onclick="triggerBatchMode('key_text_color')" class="batch-btn bg-blue">文字</button>
+                <button onclick="triggerBatchMode('hilited_key_text_color')" class="batch-btn bg-pink">按下文字</button>
+            </div>
+            
+
+            <div class="batch-label">该映射被应用在...</div>
+            <div id="popup-keys-list">
+
+            </div>
+            
+  
+            <div id="popup-delete-area">
+                <button onclick="deleteMappingFromPopup()">删除此映射</button>
+            </div>
+        </div>
+
+  
+        <div id="batch-mode-bar" class="hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] bg-emerald-600 text-white px-6 py-3 rounded-full shadow-[0_10px_40px_rgba(16,185,129,0.5)] flex items-center gap-4 border-2 border-emerald-400">
+            <span class="font-bold text-sm animate-pulse">批量映射模式</span>
+            <span id="batch-mode-text" class="text-xs">请在下方键盘点击勾选按键...</span>
+            <div class="flex gap-2 ml-4">
+                <button onclick="cancelBatchMode()" class="px-4 py-1.5 bg-emerald-800 hover:bg-emerald-900 rounded-full text-xs font-bold transition">取消</button>
+                <button onclick="applyBatchMode()" class="px-4 py-1.5 bg-white text-emerald-600 hover:bg-emerald-100 rounded-full text-xs font-bold transition shadow-md">一键应用 (已选 <span id="batch-count">0</span>)</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="import-error-popup" class="hidden fixed inset-0 z-[99999] bg-black/90 flex items-center justify-center cursor-pointer transition-opacity" onclick="this.classList.add('hidden')">
+        <div class="bg-slate-800 p-6 rounded-2xl shadow-[0_0_50px_rgba(239,68,68,0.5)] max-w-sm text-center border border-red-500" onclick="event.stopPropagation()">
+            <p class="text-white text-lg font-bold mb-2">导入失败</p>
+            <p class="text-slate-300">暂不支持此文件</p>
+            <p class="text-slate-300">请使用本工具 原创 或 使用官方yaml</p>
+            <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg text-sm" onclick="document.getElementById('import-error-popup').classList.add('hidden')">知道了</button>
+        </div>
+        </div>
+
+        <div id="image-viewer-overlay" class="hidden fixed inset-0 z-[99999] bg-black/90 flex flex-col items-center justify-center cursor-pointer transition-opacity" onclick="this.classList.add('hidden'); document.getElementById('image-viewer-img').src='';">
+        <img id="image-viewer-img" src="" class="max-w-[95vw] max-h-[90vh] object-contain rounded-lg shadow-2xl transition-transform duration-300" />
+        <p class="text-slate-400 mt-4 text-sm">点击任意空白处关闭</p>
+    </div>
+    
+
+
+        <script src="js/01-config.js"></script>
+    <script src="js/02-state.js"></script>
+    <script src="js/03-utils.js"></script>
+    <script src="js/04-engine.js"></script>
+    <script src="js/05-schemes.js"></script>
+    <script src="js/06-layouts.js"></script>
+    <script src="js/07-editors.js"></script>
+    <script src="js/08-wiring.js"></script>
+    <script src="js/09-colors.js"></script>
+    <script src="js/10-io.js"></script>
+    <script src="js/11-init.js"></script>
+</body>
+</html>
