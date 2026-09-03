@@ -248,7 +248,7 @@ function exportYAML(isFull = true) {
             });
         }
 
-        const finalYaml = res.join('');
+        const finalYaml = res.join('\n').replace(/\n{3,}/g, '\n\n');
         const blob = new Blob([finalYaml], { type: 'text/yaml;charset=utf-8' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
